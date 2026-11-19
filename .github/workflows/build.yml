@@ -1,3 +1,4 @@
+
 name: Build PlayTuxy
 
 on:
@@ -17,7 +18,7 @@ jobs:
       - name: Instalar ferramentas
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential grub-pc-bin grub-common xorriso
+          sudo apt-get install -y build-essential grub-pc-bin grub-efi-amd64-bin grub-common xorriso mtools
 
       - name: Compilar kernel x86_64
         run: |
