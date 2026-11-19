@@ -9,7 +9,7 @@
 
 A imagem abaixo representa o conceito físico planejado para o PlayTuxy: um console compacto para TV, com HDMI, Ethernet, alimentação, USB, leitor SD, áudio e ventilação.
 
-![Concept físico do console PlayTuxy](images/playtuxy-console-concept.png)
+![Concept físico do console PlayTuxy](playtuxy-console-concept.png)
 
 
 ## 1. Visão do projeto
