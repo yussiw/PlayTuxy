@@ -1,0 +1,44 @@
+name: Build PlayTuxy
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+      - name: Instalar ferramentas
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential grub-pc-bin grub-common xorriso
+
+      - name: Compilar kernel x86_64
+        run: |
+          mkdir -p build/iso/boot/grub
+          gcc -m64 -c boot/boot.S -o build/boot.o
+          gcc -m64 -std=gnu11 -O2 -ffreestanding \
+            -fno-stack-protector -fno-pic -mno-red-zone \
+            -Wall -Wextra -c kernel/kernel.c -o build/kernel.o
+          ld -m elf_x86_64 -T linker.ld \
+            -nostdlib build/boot.o build/kernel.o -o build/iso/boot/kernel.elf
+
+      - name: Verificar formato Multiboot2
+        run: grub-file --is-x86-multiboot2 build/iso/boot/kernel.elf
+
+      - name: Criar ISO inicializavel
+        run: |
+          cp grub/grub.cfg build/iso/boot/grub/grub.cfg
+          grub-mkrescue -o build/PlayTuxy.iso build/iso
+
+      - name: Publicar ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: PlayTuxy-ISO
+          path: build/PlayTuxy.iso
